@@ -32,6 +32,7 @@ module ShenXin
     end
 
     access_control.roles_for :admin do |role|
+      role.project_module :notices, '/notices'
       role.project_module :accounts, '/accounts'
     end
 

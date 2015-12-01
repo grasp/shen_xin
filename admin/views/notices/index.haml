@@ -1,0 +1,82 @@
+%ul.nav.nav-tabs
+  %li.active=link_to tag_icon(:list, pat(:list)), url(:notices, :index)
+  %li=link_to tag_icon(:plus, pat(:new)), url(:notices, :new)
+
+.tabs-content
+  %table#list.table.table-striped.table-hover.table-condensed
+    %thead
+      %tr
+        %th.header.list-menu
+          .dropdown
+            %a.list-menu-toggle.dropdown-toggle{:href => '#', :'data-toggle' => :dropdown}
+              =tag_icon :magic
+              %span.caret
+            %ul.list-menu.dropdown-menu{:role => :menu}
+              %li.list-menu-wrapper=link_to tag_icon('check-square-o', pat(:select_all)), '#', :id => 'select-all', :class => 'list-menu-link'
+              %li.list-menu-wrapper.list-menu-wrapper-disabled
+                =link_to tag_icon('square-o', pat(:deselect_all)), '#', :id => 'deselect-all', :class => 'list-menu-link list-menu-link-disabled'
+              %li.list-menu-divider.divider
+              %li.list-menu-wrapper.list-menu-wrapper-disabled
+                =link_to tag_icon('trash-o', pat(:delete_selected)), '#', :id => 'delete-selected', :class => 'list-menu-link list-menu-link-disabled'
+                .list-menu-popover-delete-selected.popover.right
+                  .arrow
+                  %h3.popover-title=pat(:delete_selected_title)
+                  .popover-content
+                    = form_tag url(:notices, :destroy_many), :method => :delete do
+                      =hidden_field_tag :notice_ids, :'data-delete-many-ids' => true
+                      =submit_tag pat(:delete), :class =>'list-menu-popover-delete-selected-btn btn btn-danger btn-small'
+                      .btn.btn-default.btn-small.cancel=pat(:cancel)
+        %th.header= mat(:notice, :created_at)
+        %th.header= mat(:notice, :updated_at)
+        %th.header= mat(:notice, :num)
+        %th.header= mat(:notice, :title)
+        %th.header= mat(:notice, :toname)
+        %th.header= mat(:notice, :body)
+        %th.header= mat(:notice, :sig)
+        %th.header= mat(:notice, :attach)
+        %th.header= mat(:notice, :sname)
+        %th.header= mat(:notice, :snumber)
+        %th.header= mat(:notice, :sorg)
+        %th.header= mat(:notice, :togroup)
+        %th.header= mat(:notice, :tognum)
+        %th.header= mat(:notice, :over)
+        %th.header= mat(:notice, :ack)
+        %th.header= mat(:notice, :remind)
+        %th.header= mat(:notice, :status)
+        %th.header= mat(:notice, :priority)
+        %th.header.list-row-action-header
+
+    %tbody
+      -@notices.each do |notice|
+        %tr.list-row
+          %td.list-column.list-selectable
+            =check_box_tag 'notice_ids[]', :value => notice.id, :class => 'list-selectable-checkbox'
+          %td.list-column=time_ago_in_words notice.created_at
+          %td.list-column=time_ago_in_words notice.updated_at
+          %td.list-column=notice.num
+          %td.list-column=notice.title
+          %td.list-column=notice.toname
+          %td.list-column=notice.body
+          %td.list-column=notice.sig
+          %td.list-column=notice.attach
+          %td.list-column=notice.sname
+          %td.list-column=notice.snumber
+          %td.list-column=notice.sorg
+          %td.list-column=notice.togroup
+          %td.list-column=notice.tognum
+          %td.list-column=notice.over
+          %td.list-column=notice.ack
+          %td.list-column=notice.remind
+          %td.list-column=notice.status
+          %td.list-column=notice.priority
+          %td.list-column.list-row-action
+            .list-row-action-wrapper
+              =link_to tag_icon(:edit), :href => url(:notices, :edit, :id => notice.id), :rel => :tooltip, :title => "#{pat(:edit)} notice", :class => 'list-row-action-wrapper-link'
+              =link_to tag_icon('trash-o'), :rel => :tooltip, :title => "#{pat(:delete)} notice", :class => 'list-row-action-delete-one list-row-action-wrapper-link'
+              .popover.list-row-action-popover-delete-one.left
+                .arrow
+                %h3.popover-title=pat(:delete, :model => "notice")
+                .popover-content
+                  = form_tag url(:notices, :destroy, :id => notice.id), :method => :delete do
+                    =submit_tag pat(:delete), :class =>'list-row-action-popover-delete-one-btn btn btn-danger btn-small'
+                    .btn.btn-default.btn-small.cancel=pat(:cancel)
